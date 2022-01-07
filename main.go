@@ -34,7 +34,15 @@ func main() {
 		c.SaveUploadedFile(file, gpFileName)
 
 		// create midi file
-		err = exec.Command("./GuitarProToMidi", gpFileName).Run()
+		prgPath, err := filepath.Abs("./GuitarProToMidi")
+		if err != nil {
+			log.Print(err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "unable to get absolute filepath of gp2midi",
+			})
+			return
+		}
+		err = exec.Command(prgPath, gpFileName).Run()
 		if err != nil {
 			log.Print(err)
 			c.JSON(http.StatusInternalServerError, gin.H{
