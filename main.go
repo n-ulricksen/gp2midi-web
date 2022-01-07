@@ -19,6 +19,7 @@ func main() {
 		// get file
 		file, err := c.FormFile("gpfile")
 		if err != nil {
+			log.Print(err)
 			c.JSON(http.StatusUnsupportedMediaType, gin.H{
 				"error": "payload must be type 'multipart/form-data'",
 			})
@@ -35,6 +36,7 @@ func main() {
 		// create midi file
 		err = exec.Command("./GuitarProToMidi", gpFileName).Run()
 		if err != nil {
+			log.Print(err)
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "file could not be converted",
 			})
