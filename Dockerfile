@@ -16,8 +16,5 @@ COPY *.go ./
 # Build
 RUN go build -o /gp2midi-web
 
-# Application port
-EXPOSE 8229
-
 # Run
 CMD [ "/gp2midi-web" ]
