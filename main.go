@@ -52,5 +52,10 @@ func main() {
 		log.Printf("success: %s --> %s\n", gpFileName, midiFileName)
 	})
 
-	server.Run(":8229")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":8229"
+	}
+
+	server.Run(port)
 }
