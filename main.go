@@ -58,15 +58,7 @@ func main() {
 			return
 		}
 
-		fileExt := filepath.Ext(file.Filename)
-
-		// save the file
-		fileId := ksuid.New()
-		fileName := fmt.Sprintf("gpfile%s", fileId.String())
-		gpFileName := fileName + fileExt
-		c.SaveUploadedFile(file, gpFileName)
-
-		// create midi file
+		// load gp2midi binary
 		prgPath, err := filepath.Abs("./GuitarProToMidi")
 		if err != nil {
 			log.Print(err)
@@ -75,12 +67,22 @@ func main() {
 			})
 			return
 		}
+
+		// save the file
+		fileId := ksuid.New()
+		fileName := fmt.Sprintf("gpfile%s", fileId.String())
+		fileExt := filepath.Ext(file.Filename)
+		gpFileName := fileName + fileExt
+		c.SaveUploadedFile(file, gpFileName)
+
+		// create midi file
 		err = exec.Command(prgPath, gpFileName).Run()
 		if err != nil {
 			log.Print(err)
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "file could not be converted",
 			})
+			os.Remove(gpFileName)
 			return
 		}
 
