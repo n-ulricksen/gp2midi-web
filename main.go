@@ -23,7 +23,10 @@ func main() {
 
 	// CORS config for local development
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	corsConfig.AllowOrigins = []string{
+		"http://localhost:3000",
+		"https://blissful-hugle-c7cd9d.netlify.app/",
+	}
 	server.Use(cors.New(corsConfig))
 
 	// Routes
