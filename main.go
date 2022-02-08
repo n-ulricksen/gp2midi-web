@@ -13,6 +13,11 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
+const (
+	maxFileUploadSize int64  = 500_000 // 500kb
+	fileUploadType    string = "application/octet-stream"
+)
+
 func main() {
 	server := gin.Default()
 
@@ -32,6 +37,27 @@ func main() {
 			})
 			return
 		}
+
+		// check file type
+		contentType := file.Header["Content-Type"][0]
+		fmt.Println(contentType)
+		if contentType != fileUploadType {
+			log.Println("unsupported media type:", contentType)
+			c.JSON(http.StatusUnsupportedMediaType, gin.H{
+				"error": "file type must be " + fileUploadType,
+			})
+			return
+		}
+
+		// check file size
+		if file.Size > maxFileUploadSize {
+			log.Println("file upload size too large:", file.Size)
+			c.JSON(http.StatusRequestEntityTooLarge, gin.H{
+				"error": "file upload size too large",
+			})
+			return
+		}
+
 		fileExt := filepath.Ext(file.Filename)
 
 		// save the file
