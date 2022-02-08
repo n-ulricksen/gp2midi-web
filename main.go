@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentio/ksuid"
 )
@@ -15,6 +16,12 @@ import (
 func main() {
 	server := gin.Default()
 
+	// CORS config for local development
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	server.Use(cors.New(corsConfig))
+
+	// Routes
 	server.POST("/compute", func(c *gin.Context) {
 		// get file
 		file, err := c.FormFile("gpfile")
