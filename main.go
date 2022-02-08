@@ -25,7 +25,7 @@ func main() {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{
 		"http://localhost:3000",
-		"https://blissful-hugle-c7cd9d.netlify.app/",
+		"https://fast-river-62884.herokuapp.com/",
 	}
 	server.Use(cors.New(corsConfig))
 
